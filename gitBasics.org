@@ -1,0 +1,238 @@
+#+Title: Chapter 2 - Git Basics
+* Git Basics
+** Getting a Git Repository 
+- Two ways to start a git project
+  1. Import existing directory into git:
+#+BEGIN_SRC shell
+git init
+git add * 
+git commit -m 'initial project version'
+#+END_SRC shell
+  2. Clone an existing repository 
+     - retrieve an existing copy of a git repository
+#+BEGIN_SRC shell
+git clone git://github.com/schacon/grit.git 'name of local folder to reside in'
+#+END_SRC
+- You can use a number of different protocols: git, http(s), etc.
+** Recording Changes to the Repository 
+- Files can either be tracked or untracked
+- tracked files are files that were present in the last snapshot
+  - these files can be unmodified, modified or staged
+- untracked files are everything else
+** Checking status of your files
+- To check status:
+#+BEGIN_SRC shell
+git status
+#+END_SRC
+** Tracking new files
+- To start tracking an untracked file:
+#+BEGIN_SRC shell
+git add <fileToTrack/directory>
+#+END_SRC
+** Staging modified files
+- git add is also used to stage modified files
+- if you stage a file, modify the same file, and then run git status
+  you will see the file mentioned twice. Once mentioning the staged
+  file to be committed and once for changes that have been made but
+  not staged. You must git add the file again to stage the latest
+  changes. 
+** Ignoring files
+- Create a .gitignore file in the project:
+#+BEGIN_SRC shell
+# a comment - this is ignored
+# no .a files
+*.a
+# but do track lib.a, even though you're ignoring .a files above
+!lib.a
+# only ignore the root TODO file, not subdir/TODO
+/TODO
+# ignore all files in the build/ directory
+build/
+# ignore doc/notes.txt, but not doc/server/arch.txt
+doc/*.txt
+# ignore all .t
+#+END_SRC
+** Viewing your staged and unstaged changes
+- To shows exact lines added and removed for a file that has been
+  changed but not staged:
+#+BEGIN_SRC shell
+git diff
+#+END_SRC
+- To show changes that you have staged:
+#+BEGIN_SRC shell
+git diff --staged
+#+END_SRC
+** Committing Your Changes
+- Only staged files are committed:
+#+BEGIN_SRC shell
+git commit
+#+END_SRC
+- the -m flag allows you to add a commit message inline
+- the -a flag allows you to skip the staging area
+** Removing files
+- To remove a file from git:
+#+BEGIN_SRC shell
+git rm
+#+END_SRC
+- To remove a file from the staging area:
+#+BEGIN_SRC shell
+git rm --staged <fileToRemove>
+#+END_SRC
+- You can pass files, directories and file-glob pattern to git rm
+** Moving files
+- git does not explicitly track file movement
+- You can rename a file as follows:
+#+BEGIN_SRC shell
+git mv fileFrom fileTo
+#+END_SRC
+* Viewing the Commit History
+- default command is:
+#+BEGIN_SRC shell
+git log
+#+END_SRC
+- to show diff for each change use a -p option
+- to limit to the last x commits use -{x} were x is a number
+- for a word diff use: --word-diff option 
+- to see stats use: --stat
+- to display in different format use: --pretty:
+#+BEGIN_SRC shell
+git log --pretty=oneline
+git log --pretty=short
+git log --pretty=full
+git log --pretty=fuller
+#+END_SRC
+- you can define your own format:
+#+BEGIN_SRC shell
+git log --pretty=format:%h - %an, %ar : %s
+#+END_SRC
+* Undoing Things
+** Changing your last commit
+- You can use the command:
+#+BEGIN_SRC shell
+git commit --amend
+#+END_SRC
+- if there are no files in the staging area since your last commit,
+  then only your last commit message will be replaced
+- If you forgot to commit a file then:
+#+BEGIN_SRC shell
+git commit -m 'initial commit'
+git add forgotten_file
+git commit --amend
+#+END_SRC
+** Unstaging a staged file
+- To unstage a staged file:
+#+BEGIN_SRC shell
+git reset HEAD <file>
+#+END_SRC
+** Unmodifying a Modified File
+- To revert a modified file:
+#+BEGIN_SRC shell
+git checkout -- <file>
+#+END_SRC
+* Working with Remotes
+- remote repositories are repositories that are hosted on some network
+** Showing Your Remotes
+- to show remote servers (-v flag shows URL associated with that server):
+#+BEGIN_SRC shell
+git remote
+#+END_SRC
+- one repository can have more than one remote in which case git
+  remote will list them all
+** Adding Remote Repositories
+- To explicitly add a remote repository:
+#+BEGIN_SRC shell
+git remote add <shortname> <url>
+#+END_SRC
+- after running above you can reference the repository by using
+  short-name instead of the url
+** Fetching and Pulling from Your Remotes
+- To get data from remote:
+#+BEGIN_SRC shell
+git fetch <remoteName>
+#+END_SRC
+- The above will pull all data from the remote since you last fetched
+  the data or since you cloned the repository
+- It will not merge the changes
+- If you want to fetch the data and have it automatically merged run:
+#+BEGIN_SRC shell
+git pull
+#+END_SRC
+** Pushing to Your Remote
+- To push your changes upstream use:
+#+BEGIN_SRC shell
+git push <remoteName> <branchName>
+#+END_SRC
+- For example:
+#+BEGIN_SRC shell
+git push origin master
+#+END_SRC
+- The above will only work if no one else had pushed their changes
+  after you last did a fetch.
+** Inspecting a Remote
+- To get useful information about a remote:
+#+BEGIN_SRC shell
+git remote show origin
+#+END_SRC
+** Removing and Renaming Remotes
+- To rename a remote's shortname:
+#+BEGIN_SRC shell
+git remote rename
+#+END_SRC
+- This will change the remote branch name as well
+- To remove a reference:
+#+BEGIN_SRC shell
+git remote rm <shortName>
+#+END_SRC
+* Tagging
+- Git has the ability to tag specific point in history as being
+  important
+** Listing tags
+- to list tags:
+#+BEGIN_SRC shell
+git tag
+#+END_SRC
+- you can filter tags like so:
+#+BEGIN_SRC shell
+git tag -l 'step-1*'
+#+END_SRC
+** Creating Tags
+- Two different types:
+  1. Lightweight - Like a branch that doesn't change. Basically a
+     pointer to a specific commit
+  2. Annotated - Stored as full objects in Git database. They're
+     checksummed, contain the tagger name, email and date, have a
+     tagging message, and can be signed and verified with GNU privacy
+     guard
+** Annotated Tags
+- To create a tag:
+#+BEGIN_SRC shell
+git tag -a v1.4 -m 'my version 1.4'
+#+END_SRC
+- the -a flag will create a tag and the -m is for an inline comment
+- To see tag info:
+#+BEGIN_SRC shell
+git show v1.4
+#+END_SRC
+** Lightweight Tags
+- Nothing more than a commit checksum stored in a file
+- Run git tag without any flags -- just specify name of tag:
+#+BEGIN_SRC shell
+git tag v1.4-lw
+#+END_SRC
+** Tagging Later
+- You can tag a specific commit even if you moved past it by
+  specifying the checksum or part of the checksum:
+#+BEGIN_SRC shell
+git tag -a v1.5 -m 'my version 1.5' 9fceb02
+#+END_SRC
+** Sharing Tags
+- by default the git push command does not transfer tags to remote
+  server
+- You must be explicit:
+#+BEGIN_SRC shell
+git push origin <tagName>
+#+END_SRC
+- To transfer all tags:
+#+BEGIN_SRC shell
+git push origin --tags
+#+END_SRC

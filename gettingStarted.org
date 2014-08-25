@@ -1,0 +1,44 @@
+#+TITLE: Chapter 1 - Getting Started
+* Getting Started
+** About Version Control
+*** Distributed Version Control Systems
+- Clients fully mirror the repository
+- Different groups can collaborate on a shared repository
+** Git Basics
+- Git thinks of its data as a set of snapshots of a mini file system
+- Every time a file is changed a new snapshot of the entire file
+  system is generated 
+- Most operations are local to your system 
+- Git only adds data.
+*** The Three states
+- Your file can reside in one of three states
+  1. committed - data is safely stored in local database
+  2. modified - file has been changed but is not stored in local DB
+  3. staged - file is marked to go into next commit snapshot
+- There are three main sections of a Git project
+  1. git directory - git metadata and object DB of your project
+  2. working directory - single checkout of one version of your
+     project from the git directory's DB
+  3. staging area - a simple file in the git directory that stores
+     the names of the files that will go into the next commit
+** First Time Git Setup
+- git comes with config tool
+#+BEGIN_SRC shell
+git config
+#+END_SRC
+- lets you get and set configuration variables
+- configuration variables can be stored in 3 different places:
+  1. /etc/gitconfig file: passing --system to git config reads and
+     writes to this file. File contains values for every user on
+     system and their repositories
+  2. ~/.gitconfig file: specific to a user. Pass in --global option
+  3. Config file in git directory - .git/config. Specific to a single
+     repository. 
+- The more local config files override settings in more
+  global config
+- setup identity:
+#+BEGIN_SRC shell
+git config --global user.name "Pawel Bokota"
+git config --global user.email yourEmail@email.com
+git config --global core.editor emacs
+#+END_SRC

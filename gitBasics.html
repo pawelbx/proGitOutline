@@ -1,0 +1,954 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Chapter 2 - Git Basics</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Chapter 2 - Git Basics"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2014-08-25T18:31-0400"/>
+<meta name="author" content="pawel"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 2 - Git Basics</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Git Basics</a>
+<ul>
+<li><a href="#sec-1-1">1.1 Getting a Git Repository</a></li>
+<li><a href="#sec-1-2">1.2 Recording Changes to the Repository</a></li>
+<li><a href="#sec-1-3">1.3 Checking status of your files</a></li>
+<li><a href="#sec-1-4">1.4 Tracking new files</a></li>
+<li><a href="#sec-1-5">1.5 Staging modified files</a></li>
+<li><a href="#sec-1-6">1.6 Ignoring files</a></li>
+<li><a href="#sec-1-7">1.7 Viewing your staged and unstaged changes</a></li>
+<li><a href="#sec-1-8">1.8 Committing Your Changes</a></li>
+<li><a href="#sec-1-9">1.9 Removing files</a></li>
+<li><a href="#sec-1-10">1.10 Moving files</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2 Viewing the Commit History</a></li>
+<li><a href="#sec-3">3 Undoing Things</a>
+<ul>
+<li><a href="#sec-3-1">3.1 Changing your last commit</a></li>
+<li><a href="#sec-3-2">3.2 Unstaging a staged file</a></li>
+<li><a href="#sec-3-3">3.3 Unmodifying a Modified File</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4 Working with Remotes</a>
+<ul>
+<li><a href="#sec-4-1">4.1 Showing Your Remotes</a></li>
+<li><a href="#sec-4-2">4.2 Adding Remote Repositories</a></li>
+<li><a href="#sec-4-3">4.3 Fetching and Pulling from Your Remotes</a></li>
+<li><a href="#sec-4-4">4.4 Pushing to Your Remote</a></li>
+<li><a href="#sec-4-5">4.5 Inspecting a Remote</a></li>
+<li><a href="#sec-4-6">4.6 Removing and Renaming Remotes</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5 Tagging</a>
+<ul>
+<li><a href="#sec-5-1">5.1 Listing tags</a></li>
+<li><a href="#sec-5-2">5.2 Creating Tags</a></li>
+<li><a href="#sec-5-3">5.3 Annotated Tags</a></li>
+<li><a href="#sec-5-4">5.4 Lightweight Tags</a></li>
+<li><a href="#sec-5-5">5.5 Tagging Later</a></li>
+<li><a href="#sec-5-6">5.6 Sharing Tags</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Git Basics</h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Getting a Git Repository</h3>
+<div class="outline-text-3" id="text-1-1">
+
+<ul>
+<li>Two ways to start a git project
+<ol>
+<li>Import existing directory into git:
+</li>
+</ol>
+
+</li>
+</ul>
+
+
+
+
+<pre class="example">git init
+git add * 
+git commit -m 'initial project version'
+</pre>
+
+<ol>
+<li>Clone an existing repository 
+<ul>
+<li>retrieve an existing copy of a git repository
+</li>
+</ul>
+
+</li>
+</ol>
+
+
+
+
+<pre class="example">git clone git://github.com/schacon/grit.git 'name of local folder to reside in'
+</pre>
+
+<ul>
+<li>You can use a number of different protocols: git, http(s), etc.
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Recording Changes to the Repository</h3>
+<div class="outline-text-3" id="text-1-2">
+
+<ul>
+<li>Files can either be tracked or untracked
+</li>
+<li>tracked files are files that were present in the last snapshot
+<ul>
+<li>these files can be unmodified, modified or staged
+</li>
+</ul>
+
+</li>
+<li>untracked files are everything else
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Checking status of your files</h3>
+<div class="outline-text-3" id="text-1-3">
+
+<ul>
+<li>To check status:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git status
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Tracking new files</h3>
+<div class="outline-text-3" id="text-1-4">
+
+<ul>
+<li>To start tracking an untracked file:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git add &lt;fileToTrack/directory&gt;
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Staging modified files</h3>
+<div class="outline-text-3" id="text-1-5">
+
+<ul>
+<li>git add is also used to stage modified files
+</li>
+<li>if you stage a file, modify the same file, and then run git status
+  you will see the file mentioned twice. Once mentioning the staged
+  file to be committed and once for changes that have been made but
+  not staged. You must git add the file again to stage the latest
+  changes. 
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Ignoring files</h3>
+<div class="outline-text-3" id="text-1-6">
+
+<ul>
+<li>Create a .gitignore file in the project:
+</li>
+</ul>
+
+
+
+
+<pre class="example"># a comment - this is ignored
+# no .a files
+*.a
+# but do track lib.a, even though you're ignoring .a files above
+!lib.a
+# only ignore the root TODO file, not subdir/TODO
+/TODO
+# ignore all files in the build/ directory
+build/
+# ignore doc/notes.txt, but not doc/server/arch.txt
+doc/*.txt
+# ignore all .t
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-7" class="outline-3">
+<h3 id="sec-1-7"><span class="section-number-3">1.7</span> Viewing your staged and unstaged changes</h3>
+<div class="outline-text-3" id="text-1-7">
+
+<ul>
+<li>To shows exact lines added and removed for a file that has been
+  changed but not staged:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git diff
+</pre>
+
+<ul>
+<li>To show changes that you have staged:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git diff --staged
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-8" class="outline-3">
+<h3 id="sec-1-8"><span class="section-number-3">1.8</span> Committing Your Changes</h3>
+<div class="outline-text-3" id="text-1-8">
+
+<ul>
+<li>Only staged files are committed:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git commit
+</pre>
+
+<ul>
+<li>the -m flag allows you to add a commit message inline
+</li>
+<li>the -a flag allows you to skip the staging area
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-9" class="outline-3">
+<h3 id="sec-1-9"><span class="section-number-3">1.9</span> Removing files</h3>
+<div class="outline-text-3" id="text-1-9">
+
+<ul>
+<li>To remove a file from git:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git rm
+</pre>
+
+<ul>
+<li>To remove a file from the staging area:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git rm --staged &lt;fileToRemove&gt;
+</pre>
+
+<ul>
+<li>You can pass files, directories and file-glob pattern to git rm
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-10" class="outline-3">
+<h3 id="sec-1-10"><span class="section-number-3">1.10</span> Moving files</h3>
+<div class="outline-text-3" id="text-1-10">
+
+<ul>
+<li>git does not explicitly track file movement
+</li>
+<li>You can rename a file as follows:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git mv fileFrom fileTo
+</pre>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Viewing the Commit History</h2>
+<div class="outline-text-2" id="text-2">
+
+<ul>
+<li>default command is:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git log
+</pre>
+
+<ul>
+<li>to show diff for each change use a -p option
+</li>
+<li>to limit to the last x commits use -{x} were x is a number
+</li>
+<li>for a word diff use: &ndash;word-diff option 
+</li>
+<li>to see stats use: &ndash;stat
+</li>
+<li>to display in different format use: &ndash;pretty:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git log --pretty=oneline
+git log --pretty=short
+git log --pretty=full
+git log --pretty=fuller
+</pre>
+
+<ul>
+<li>you can define your own format:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git log --pretty=format:%h - %an, %ar : %s
+</pre>
+
+<ul>
+<li>for reference for format options:
+  <a href="http://git-scm.com/book/en/Git-Basics-Viewing-the-Commit-History">http://git-scm.com/book/en/Git-Basics-Viewing-the-Commit-History</a>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Undoing Things</h2>
+<div class="outline-text-2" id="text-3">
+
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Changing your last commit</h3>
+<div class="outline-text-3" id="text-3-1">
+
+<ul>
+<li>You can use the command:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git commit --amend
+</pre>
+
+<ul>
+<li>if there are no files in the staging area since your last commit,
+  then only your last commit message will be replaced
+</li>
+<li>If you forgot to commit a file then:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git commit -m 'initial commit'
+git add forgotten_file
+git commit --amend
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Unstaging a staged file</h3>
+<div class="outline-text-3" id="text-3-2">
+
+<ul>
+<li>To unstage a staged file:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git reset HEAD &lt;file&gt;
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Unmodifying a Modified File</h3>
+<div class="outline-text-3" id="text-3-3">
+
+<ul>
+<li>To revert a modified file:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git checkout -- &lt;file&gt;
+</pre>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Working with Remotes</h2>
+<div class="outline-text-2" id="text-4">
+
+<ul>
+<li>remote repositories are repositories that are hosted on some network
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Showing Your Remotes</h3>
+<div class="outline-text-3" id="text-4-1">
+
+<ul>
+<li>to show remote servers (-v flag shows URL associated with that server):
+</li>
+</ul>
+
+
+
+
+<pre class="example">git remote
+</pre>
+
+<ul>
+<li>one repository can have more than one remote in which case git
+  remote will list them all
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Adding Remote Repositories</h3>
+<div class="outline-text-3" id="text-4-2">
+
+<ul>
+<li>To explicitly add a remote repository:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git remote add &lt;shortname&gt; &lt;url&gt;
+</pre>
+
+<ul>
+<li>after running above you can reference the repository by using
+  short-name instead of the url
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> Fetching and Pulling from Your Remotes</h3>
+<div class="outline-text-3" id="text-4-3">
+
+<ul>
+<li>To get data from remote:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git fetch &lt;remoteName&gt;
+</pre>
+
+<ul>
+<li>The above will pull all data from the remote since you last fetched
+  the data or since you cloned the repository
+</li>
+<li>It will not merge the changes
+</li>
+<li>If you want to fetch the data and have it automatically merged run:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git pull
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> Pushing to Your Remote</h3>
+<div class="outline-text-3" id="text-4-4">
+
+<ul>
+<li>To push your changes upstream use:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git push &lt;remoteName&gt; &lt;branchName&gt;
+</pre>
+
+<ul>
+<li>For example:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git push origin master
+</pre>
+
+<ul>
+<li>The above will only work if no one else had pushed their changes
+  after you last did a fetch.
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3">4.5</span> Inspecting a Remote</h3>
+<div class="outline-text-3" id="text-4-5">
+
+<ul>
+<li>To get useful information about a remote:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git remote show origin
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-4-6" class="outline-3">
+<h3 id="sec-4-6"><span class="section-number-3">4.6</span> Removing and Renaming Remotes</h3>
+<div class="outline-text-3" id="text-4-6">
+
+<ul>
+<li>To rename a remote's shortname:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git remote rename
+</pre>
+
+<ul>
+<li>This will change the remote branch name as well
+</li>
+<li>To remove a reference:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git remote rm &lt;shortName&gt;
+</pre>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Tagging</h2>
+<div class="outline-text-2" id="text-5">
+
+<ul>
+<li>Git has the ability to tag specific point in history as being
+  important
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Listing tags</h3>
+<div class="outline-text-3" id="text-5-1">
+
+<ul>
+<li>to list tags:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git tag
+</pre>
+
+<ul>
+<li>you can filter tags like so:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git tag -l 'step-1*'
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> Creating Tags</h3>
+<div class="outline-text-3" id="text-5-2">
+
+<ul>
+<li>Two different types:
+<ol>
+<li>Lightweight - Like a branch that doesn't change. Basically a
+     pointer to a specific commit
+</li>
+<li>Annotated - Stored as full objects in Git database. They're
+     checksummed, contain the tagger name, email and date, have a
+     tagging message, and can be signed and verified with GNU privacy
+     guard
+</li>
+</ol>
+
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> Annotated Tags</h3>
+<div class="outline-text-3" id="text-5-3">
+
+<ul>
+<li>To create a tag:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git tag -a v1.4 -m 'my version 1.4'
+</pre>
+
+<ul>
+<li>the -a flag will create a tag and the -m is for an inline comment
+</li>
+<li>To see tag info:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git show v1.4
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-5-4" class="outline-3">
+<h3 id="sec-5-4"><span class="section-number-3">5.4</span> Lightweight Tags</h3>
+<div class="outline-text-3" id="text-5-4">
+
+<ul>
+<li>Nothing more than a commit checksum stored in a file
+</li>
+<li>Run git tag without any flags &ndash; just specify name of tag:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git tag v1.4-lw
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-5-5" class="outline-3">
+<h3 id="sec-5-5"><span class="section-number-3">5.5</span> Tagging Later</h3>
+<div class="outline-text-3" id="text-5-5">
+
+<ul>
+<li>You can tag a specific commit even if you moved past it by
+  specifying the checksum or part of the checksum:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git tag -a v1.5 -m 'my version 1.5' 9fceb02
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-5-6" class="outline-3">
+<h3 id="sec-5-6"><span class="section-number-3">5.6</span> Sharing Tags</h3>
+<div class="outline-text-3" id="text-5-6">
+
+<ul>
+<li>by default the git push command does not transfer tags to remote
+  server
+</li>
+<li>You must be explicit:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git push origin &lt;tagName&gt;
+</pre>
+
+<ul>
+<li>To transfer all tags:
+</li>
+</ul>
+
+
+
+
+<pre class="example">git push origin --tags
+</pre>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2014-08-25T18:31-0400</p>
+<p class="author">Author: pawel</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

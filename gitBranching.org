@@ -1,0 +1,146 @@
+#+TITLE: Chapter 3 - Git Branching
+* Git Branching - What a Branch Is
+** What a Branch is
+- When you stage files, git will checksum each file, store that
+  version of the file in the git repository, and add the checksum to
+  the [[file:gettingStarted.org::*The%20Three%20states][staging area]]
+- When you commit, git will 
+  1. checksum all project directories and store them as tree objects
+     in the git repository. The tree object lists the contents of
+     directory and specifies which files names are stored as which
+     blobs.
+  2. create a commit object that contains metadata about the commit
+     (e.g. commit date, author, etc.), a pointer to a tree object
+     that corresponds to the root project directory, and if there is
+     a previous commit, a pointer to that commit object.
+- A branch is a movable pointer that points to a commit object
+- The default branch is the "master" branch
+- Everytime you commit the master branch pointer is automatically moved
+  forward to the latest commit
+- To create a new branch:
+#+BEGIN_SRC shell
+git branch testing
+#+END_SRC
+- The above will create a new pointer "testing", which will point to
+  the last commit object
+- The above command does not switch to the new branch
+- How does git know which branch you're on?
+  - It keeps a special pointer called "HEAD" - it points to the
+    branch pointer
+- To switch to the new branch:
+#+BEGIN_SRC shell
+git checkout testing
+#+END_SRC
+- The "HEAD" pointer now points to the testing pointer
+- Now when you commit, the testing pointer will point to the new
+  commit object while the master pointer will point to the previous
+  commit
+- When you switch back and make a new commit:
+#+BEGIN_SRC shell
+git checkout master
+git commit -a -m 'a commit to master branch'
+#+END_SRC
+- After git checkout, two things happen:
+  1. "HEAD" points to master pointer
+  2.  The files in your working directory have been reverted to the
+      snapshot that master points to.
+- Once you commit, the branches diverge
+- Creating a branch is quick and simple and therefore is encouraged
+* Basic Branching and Merging
+** Basic Branching
+- An example scenario:
+  1. You have a production branch on your local system
+  2. You have to work on issue 53
+  3. You get a call that says you must fix a bug
+  4. After the bug is fixed, 
+- To accomplish the above in git:
+- First create a branch and switch to it (-b flag):
+#+BEGIN_SRC shell
+git checkout -b <branchName>
+git checkout -b iss53
+#+END_SRC
+- Now switch back to master branch, but note that if your working
+  directory or staging area have uncommitted changes, Git won't let
+  you switch
+#+BEGIN_SRC shell
+git checkout master
+#+END_SRC
+- The above has reset your working directory to look like the
+  snapshot before you branched
+- Now create a branch to work on for the hotfix:
+#+BEGIN_SRC shell
+git checkout -b hotfix
+#+END_SRC
+- Once you've committed your changes to the hotfix branch, you must
+  merge them back to the production branch:
+#+BEGIN_SRC shell
+git checkout master
+git merge hotfix
+#+END_SRC
+- in this case, the git merge command will move the master pointer
+  forward because the branch was directly upstream. This is called a
+  "fast forward"
+- now you can delete the hotfix branch:
+#+BEGIN_SRC shell
+git branch -d hotfix
+#+END_SRC
+- switch to issue 53 branch:
+#+BEGIN_SRC shell
+git checkout iss53
+#+END_SRC
+** Basic Merging
+- Once you've finished working on issue 53, you have to merge it back
+  to the master branch:
+#+BEGIN_SRC shell
+git checkout master
+git merge iss53
+#+END_SRC
+- Since the master and iss53 branches are not on the same stream,
+  they are merged using a three-way merge:
+  1. It will use the two snapshots that you want to merge plus their
+     common ancestor
+  2. Git will create a new commit based on the merger, which master
+     will point to (known as a merge commit)
+- The new commit will have two pointers that will point to the last
+  commit from the previous two branches
+** Basic Merge Conflicts
+- If the same file is modified from two different branches a conflict
+  will result if you try to merge the two branches. The merge will
+  fail.
+- git status will show you conflicts
+- The conflicting files will have standard conflict markers
+- Once the conflicts have been resolved, you use git commit to
+  finalize the merge commit
+* Branch Management
+** Branch Management
+- To list branches:
+#+BEGIN_SRC shell
+git branch
+#+END_SRC
+- The star character next to the branch listings indicated the
+  current branch
+- To see last commit on each branch:
+#+BEGIN_SRC shell
+git branch -v
+#+END_SRC
+- To see branches that are merged/not-merged into your current branch:
+#+BEGIN_SRC shell
+git branch --merged
+git branch --no-merged
+#+END_SRC
+- You can't delete a branch that is not merged. Unless you specify
+  the -D flag
+* Branching Workflows
+** Long Running Branches
+- One possible workflow is to have multiple branches.
+- One branch is the stable branch - ready for release
+- The next branch is unstable and the branch after it is even more
+  unstable
+- As you develop, you merge the less stable merges with the more
+  stable branches
+- Useful for complex projects
+** Topic Branches
+- A short lived branch useful for one particular feature. 
+- See example above with iss53
+* Remote Branches
+** Remote Branches
