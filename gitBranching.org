@@ -144,3 +144,31 @@ git branch --no-merged
 - See example above with iss53
 * Remote Branches
 ** Remote Branches
+- Remote branches are references to the state of a branch on a remote
+  repository
+- When you clone a repository:
+  1. Git names the remote 'origin'
+  2. Pulls down all its data
+  3. Creates a pointer called 'origin/master' -> points to remote
+     master branch, which can't be moved locally. 
+  4. Creates another pointer called 'master'. which is moved locally
+- As long as you stay out of contact with remote repository the
+  origin/master pointer does not move
+- To sync with the remote server you:
+#+BEGIN_SRC shell
+git fetch origin
+#+END_SRC
+- The above will fetch any date you don't have and will move the
+  'origin/master' pointer if it was out of sync with the remote.
+- You can add multiple remotes and fetch from each one, which will
+  create a corresponding '<remote>/master' pointer
+- running fetch will not merge any newly retrieve data. 
+** Pushing
+- To write your changes to a remote you mush push them:
+#+BEGIN_SRC shell
+git push <remoteName> <branchName>
+#+END_SRC
+- The above is a shortcut for:
+#+BEGIN_SRC shell
+git push <remoteName> refs/heads/<branchName>:refs/heads/<remoteBranchName>
+#+END_SRC
