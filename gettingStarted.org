@@ -42,3 +42,7 @@ git config --global user.name "Pawel Bokota"
 git config --global user.email yourEmail@email.com
 git config --global core.editor emacs
 #+END_SRC
+- To view your settings:
+#+BEGIN_SRC shell
+git config --list
+#+END_SRC
