@@ -101,8 +101,8 @@ git merge iss53
      common ancestor
   2. Git will create a new commit based on the merger, which master
      will point to (known as a merge commit)
-- The new commit will have two pointers that will point to the last
-  commit from the previous two branches
+- The new commit will have two parent pointers that will point to the
+  last commit from the previous two branches
 ** Basic Merge Conflicts
 - If the same file is modified from two different branches a conflict
   will result if you try to merge the two branches. The merge will
@@ -162,13 +162,43 @@ git fetch origin
   'origin/master' pointer if it was out of sync with the remote.
 - You can add multiple remotes and fetch from each one, which will
   create a corresponding '<remote>/master' pointer
-- running fetch will not merge any newly retrieve data. 
+- running fetch will not merge any newly retrieve data and the new
+  data is not automatically editable
+- if you want to work a branch based of off a remote branch you can do:
+#+BEGIN_SRC shell
+git checkout -b <localBranchName> <origin/remoteBranchName>
+#+END_SRC
 ** Pushing
-- To write your changes to a remote you mush push them:
+- To write your changes to a remote you must push them:
 #+BEGIN_SRC shell
 git push <remoteName> <branchName>
 #+END_SRC
 - The above is a shortcut for:
 #+BEGIN_SRC shell
-git push <remoteName> refs/heads/<branchName>:refs/heads/<remoteBranchName>
+git push <remoteName> refs/heads/<localBranchName>:refs/heads/<remoteBranchName>
+#+END_SRC
+- Note that the local and remote branch names do not have to match
+** Tracking Branches
+- Tracking branches are local branches that have a direct
+  relationship to a remote branch
+- If you're on a tracking branch then git push and pull know which
+  server and branch you mean
+- When you clone a branch, git will create a local master branch that
+  tracks origin/master
+- A shortcut to checkout a local tracking branch is:
+#+BEGIN_SRC shell
+git checkout --track orgin/<branchName>
+#+END_SRC
+- To setup a local branch with a different name:
+#+BEGIN_SRC shell
+git checkout -b <localBranchName> origin/<branchName>
+#+END_SRC
+** Deleting Remote Branches
+- To delete a remote branch:
+#+BEGIN_SRC shell
+git push origin :<branchName>
+#+END_SRC
+- This syntax comes from (take nothing from my side and make it be remote):
+#+BEGIN_SRC shell
+git push [remotename] [localbranch]:[remotebranch]
 #+END_SRC
