@@ -202,3 +202,31 @@ git push origin :<branchName>
 #+BEGIN_SRC shell
 git push [remotename] [localbranch]:[remotebranch]
 #+END_SRC
+* Rebasing
+** The Basic Rebase
+- Rebasing is a way to integrate changes from one branch into another
+- Merging takes the endpoints of branches and merges them together
+  whereas rebasing takes the changes committed on one branch and
+  replays them on another:
+#+BEGIN_SRC shell
+git checkout <branchName>
+git rebase <branchNameToRebaseOnto>
+#+END_SRC
+- Rebasing works by:
+  1. Finding common ancestor of two branches
+  2. Getting diff introduced by each commit of the branch you're on
+  3. Saving the diffs to a temporary file
+  4. Resets current branch to the same commit as the branch you are
+     rebasing onto
+  5. Applies each change in turn
+- After rebase is done you, you can switch to the branch you are
+  rebasing onto and do a fast-forward merge
+- The final snapshot will look the same as an equivalent merge. Only
+  the history will be different
+- The purpose of a rebase is a clean linear history and easy merging
+  for a project maintainer
+** More Interesting Rebases
+- 
+** The Perils of Rebasing
+- Do not rebase commits that you have pushed to a public repository
+
