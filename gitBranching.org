@@ -212,6 +212,10 @@ git push [remotename] [localbranch]:[remotebranch]
 git checkout <branchName>
 git rebase <branchNameToRebaseOnto>
 #+END_SRC
+A shorter form of the above:
+#+BEGIN_SRC shell
+git rebase <branchNameToRebaseOnto> <branchName>
+#+END_SRC
 - Rebasing works by:
   1. Finding common ancestor of two branches
   2. Getting diff introduced by each commit of the branch you're on
@@ -226,7 +230,17 @@ git rebase <branchNameToRebaseOnto>
 - The purpose of a rebase is a clean linear history and easy merging
   for a project maintainer
 ** More Interesting Rebases
-- 
+- If you have multiple branches you can specify which branch changes
+  you want to replay
+- The command below will find the common ancestor of <branchA> and
+  <branchB> and take changes from <branchB> and replay them onto
+  <branchNameToRebaseOnto> :
+#+BEGIN_SRC shell
+git rebase --onto <branchNameToRebaseOnto> <branchA> <branchB>
+- You can delete the branches after integrating them with rebase
+#+END_SRC
 ** The Perils of Rebasing
 - Do not rebase commits that you have pushed to a public repository
-
+- Rebasing creates new commits and abandons old ones
+- Other team members will have to re-merge their work if you rebase
+  public commits
