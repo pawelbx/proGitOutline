@@ -1,0 +1,38 @@
+#+TITLE: Chapter 9 - Git Internals
+* Plumbing and Porcelain
+- Inside git directory you have:
+  - branches directory - not used in newer versions of Git
+  - description file - only used by GitWeb program
+  - config file - project specific configuration options
+  - info directory - global exclude file for ignored patterns that
+    you don't want to keep in a .gitignore file
+  - hooks directory - client or server side hook scripts
+  - objects directory - stores all content for your database
+  - refs directory - stores pointers into commit objects 
+  - HEAD file - points to branch you currently have checked out
+  - index file - stores your staging area information
+* Git Objects
+- Git is fundamentally a content addressable file system with a VCS
+  on top of it
+- content addressable file system is a key-value data store - you
+  give it data and it will return a key that you can use to later
+  retrieve that data
+- You can use plumbing command hash-object to demonstrate:
+#+BEGIN_SRC shell
+echo 'hello world' | git hash-object -w --stdin
+#+END_SRC
+- The above will return a SHA-1 hash - a checksum of the content
+  you're storing plus a header
+- The -w flag tells it to store the object
+- The --stdin tells command to read the content from stdin, else you
+  would need to specify a path to a file
+- After the above command the file is stored in .git/objects/<first 2
+  characters of hash>/<remaining 38 character>
+- You can pull out the content with the following:
+#+BEGIN_SRC shell
+git cat-file -p <hash>
+#+END_SRC
+- The -p flag instructs it to figure out the type of content and to
+  display it nicely
+
+
